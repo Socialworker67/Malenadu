@@ -1,0 +1,1346 @@
+/* ==============================================
+   style.css — Malenadu Tiffin
+   Task 2: Full homepage design.
+   Sections: Variables, Reset, Loader, Navbar,
+             Hero, Animations, Sections, Cards,
+             About, Contact, Footer, Responsive.
+   ============================================== */
+
+
+/* ================================================
+   1. CSS VARIABLES — Design Tokens
+   Change a value here and it updates everywhere.
+   ================================================ */
+:root {
+    /* Brand Colours */
+    --color-cream:       #fdf6ec;   /* warm off-white — main background  */
+    --color-cream-dark:  #f5ece0;   /* slightly deeper cream             */
+    --color-green-deep:  #1a3a16;   /* rich forest green — hero bg       */
+    --color-green-mid:   #2d5a27;   /* medium green — accents            */
+    --color-green-light: #4a7c40;   /* lighter green                     */
+    --color-green-pale:  #e8f0e6;   /* very light green — section tint   */
+    --color-gold:        #c8922a;   /* warm gold — primary accent        */
+    --color-gold-light:  #e8b84b;   /* lighter gold — hover states       */
+    --color-charcoal:    #2b2b2b;   /* near-black — body text            */
+    --color-text-mid:    #4a4a4a;   /* mid-grey — secondary text         */
+    --color-text-muted:  #777777;   /* muted — descriptions              */
+    --color-white:       #ffffff;
+
+    /* Typography */
+    --font-heading: 'Playfair Display', Georgia, serif;
+    --font-body:    'Inter', 'Segoe UI', Tahoma, sans-serif;
+
+    /* Layout */
+    --container-width: 1000px;
+    --navbar-height:   68px;
+
+    /* Spacing scale */
+    --space-xs:  0.5rem;
+    --space-sm:  1rem;
+    --space-md:  1.75rem;
+    --space-lg:  3.5rem;
+    --space-xl:  5rem;
+
+    /* Border radii */
+    --radius-sm:   6px;
+    --radius-md:   12px;
+    --radius-lg:   20px;
+    --radius-pill: 100px;
+
+    /* Shadows */
+    --shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
+    --shadow-md: 0 4px 20px rgba(0,0,0,0.10);
+    --shadow-lg: 0 8px 40px rgba(0,0,0,0.14);
+
+    /* Transitions */
+    --transition-fast:   0.2s ease;
+    --transition-normal: 0.35s ease;
+}
+
+
+/* ================================================
+   2. RESET & BASE
+   ================================================ */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+    font-size: 16px;
+}
+
+body {
+    font-family: var(--font-body);
+    background-color: var(--color-cream);
+    color: var(--color-charcoal);
+    line-height: 1.7;
+    overflow-x: hidden;
+}
+
+img { max-width: 100%; display: block; }
+a   { color: inherit; text-decoration: none; }
+ul[role="list"] { list-style: none; }
+
+
+/* ================================================
+   3. CONTAINER — centres content with max-width
+   ================================================ */
+.container {
+    max-width: var(--container-width);
+    margin: 0 auto;
+    padding: 0 var(--space-md);
+}
+
+
+/* ================================================
+   4. LOADING SCREEN
+   Green overlay that covers the page on first load.
+   JS adds .hidden to fade it out.
+   ================================================ */
+.loader {
+    position: fixed;
+    inset: 0;                        /* top/right/bottom/left: 0 */
+    background-color: var(--color-green-deep);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    transition: opacity 0.6s ease, visibility 0.6s ease;
+}
+
+/* JS adds this class to trigger the fade-out */
+.loader.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.loader-inner {
+    text-align: center;
+    color: var(--color-cream);
+}
+
+.loader-brand {
+    font-family: var(--font-heading);
+    font-size: 2.2rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    margin-bottom: var(--space-xs);
+    animation: fadeInDown 0.8s ease forwards;
+}
+
+.loader-sub {
+    font-size: 0.95rem;
+    color: #9ec49a;
+    font-style: italic;
+    margin-bottom: var(--space-md);
+    opacity: 0;
+    animation: fadeInDown 0.8s ease 0.25s forwards;
+}
+
+/* The thin progress bar */
+.loader-bar {
+    width: 200px;
+    height: 2px;
+    background-color: rgba(255,255,255,0.12);
+    border-radius: var(--radius-pill);
+    overflow: hidden;
+    margin: 0 auto;
+}
+
+.loader-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--color-gold), var(--color-gold-light));
+    border-radius: var(--radius-pill);
+    animation: loadBar 1.4s ease forwards 0.3s;
+}
+
+@keyframes loadBar {
+    to { width: 100%; }
+}
+
+@keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+
+/* ================================================
+   5. NAVIGATION BAR
+   Fixed at top. Transparent over hero.
+   .scrolled class added by JS when user scrolls.
+   ================================================ */
+.navbar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 1000;
+    height: var(--navbar-height);
+    /* Semi-transparent dark green by default — always visible over the hero.
+       This prevents the "empty white bar" look. */
+    background-color: rgba(26, 58, 22, 0.55);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    transition: background-color var(--transition-normal),
+                box-shadow var(--transition-normal),
+                border-color var(--transition-normal),
+                backdrop-filter var(--transition-normal);
+}
+
+/* Solid cream navbar when user scrolls past the hero */
+.navbar.scrolled {
+    background-color: rgba(253, 246, 236, 0.97);
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    box-shadow: var(--shadow-sm);
+}
+
+.nav-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: var(--navbar-height);
+}
+
+/* Brand name in navbar */
+.nav-brand {
+    font-family: var(--font-heading);
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--color-white);
+    letter-spacing: 0.02em;
+    transition: color var(--transition-fast);
+}
+
+.navbar.scrolled .nav-brand {
+    color: var(--color-green-deep);
+}
+
+/* Nav link list */
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    list-style: none;
+}
+
+.nav-links a {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: rgba(255,255,255,0.88);
+    letter-spacing: 0.03em;
+    transition: color var(--transition-fast);
+    position: relative;
+    padding-bottom: 2px;
+}
+
+/* Animated underline on hover */
+.nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 0;
+    height: 1px;
+    background-color: var(--color-gold-light);
+    transition: width var(--transition-normal);
+}
+.nav-links a:hover::after { width: 100%; }
+.nav-links a:hover { color: var(--color-white); }
+
+/* Once scrolled, links become dark */
+.navbar.scrolled .nav-links a        { color: var(--color-text-mid); }
+.navbar.scrolled .nav-links a:hover  { color: var(--color-green-mid); }
+.navbar.scrolled .nav-links a::after { background-color: var(--color-green-mid); }
+
+/* Hamburger button — hidden on desktop */
+.nav-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: var(--space-xs);
+    border-radius: var(--radius-sm);
+}
+
+.hamburger-line {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background-color: var(--color-white);
+    border-radius: 2px;
+    transition: transform var(--transition-normal),
+                opacity var(--transition-fast),
+                background-color var(--transition-fast);
+}
+
+.navbar.scrolled .hamburger-line { background-color: var(--color-charcoal); }
+
+
+/* ================================================
+   6. HERO SECTION
+   Full-viewport-height opening panel.
+   Dark green background with CSS decorations.
+   ================================================ */
+.hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--color-green-deep);
+    overflow: hidden;
+    padding: var(--navbar-height) var(--space-md) var(--space-xl);
+}
+
+/* Dot grid — gives depth without an image */
+.hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(rgba(255,255,255,0.04) 1px, transparent 1px);
+    background-size: 28px 28px;
+    pointer-events: none;
+}
+
+/* Decorative radial blobs for visual warmth */
+.hero-blob {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.hero-blob--1 {
+    width: 560px;
+    height: 560px;
+    background: radial-gradient(circle, rgba(45,90,39,0.55) 0%, transparent 70%);
+    top: -130px;
+    right: -130px;
+}
+
+.hero-blob--2 {
+    width: 420px;
+    height: 420px;
+    background: radial-gradient(circle, rgba(200,146,42,0.10) 0%, transparent 70%);
+    bottom: -60px;
+    left: -80px;
+}
+
+/* All hero text content sits above the blobs */
+.hero-content {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    max-width: 720px;
+    width: 100%;
+}
+
+/* Gold pill badge above the title */
+.opening-badge {
+    display: inline-block;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-gold-light);
+    background-color: rgba(200,146,42,0.12);
+    border: 1px solid rgba(200,146,42,0.28);
+    padding: 0.4em 1.3em;
+    border-radius: var(--radius-pill);
+    margin-bottom: var(--space-md);
+}
+
+/* Main brand heading — scales fluidly with viewport */
+.hero-title {
+    font-family: var(--font-heading);
+    font-size: clamp(3rem, 9vw, 6.5rem);
+    font-weight: 700;
+    line-height: 1.08;
+    color: var(--color-cream);
+    margin-bottom: var(--space-sm);
+    letter-spacing: -0.01em;
+}
+
+/* Italic tagline below the title */
+.hero-tagline {
+    font-family: var(--font-heading);
+    font-style: italic;
+    font-weight: 500;
+    font-size: clamp(1rem, 2.5vw, 1.45rem);
+    color: #9ec49a;
+    margin-bottom: var(--space-sm);
+}
+
+/* Description + location line */
+.hero-sub {
+    font-size: 0.97rem;
+    color: rgba(253,246,236,0.62);
+    margin-bottom: var(--space-md);
+    line-height: 1.9;
+}
+
+.hero-location {
+    display: inline-block;
+    margin-top: var(--space-xs);
+    color: rgba(253,246,236,0.5);
+    font-size: 0.88rem;
+}
+
+/* Soft gold box for the launch offer */
+.hero-offer {
+    display: inline-block;
+    background-color: rgba(200,146,42,0.13);
+    border: 1px solid rgba(200,146,42,0.32);
+    border-radius: var(--radius-md);
+    padding: 0.6rem 1.6rem;
+    font-size: 0.98rem;
+    color: var(--color-gold-light);
+    margin-bottom: var(--space-md);
+}
+
+.hero-offer strong {
+    font-size: 1.12rem;
+    color: var(--color-gold-light);
+}
+
+/* CTA Buttons */
+.hero-actions {
+    display: flex;
+    gap: var(--space-sm);
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.btn {
+    display: inline-block;
+    padding: 0.75rem 2rem;
+    border-radius: var(--radius-pill);
+    font-size: 0.93rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: transform var(--transition-fast),
+                box-shadow var(--transition-fast),
+                background-color var(--transition-fast),
+                color var(--transition-fast),
+                border-color var(--transition-fast);
+}
+
+.btn:hover { transform: translateY(-2px); }
+
+.btn-primary {
+    background-color: var(--color-gold);
+    color: var(--color-white);
+    border-color: var(--color-gold);
+}
+
+.btn-primary:hover {
+    background-color: var(--color-gold-light);
+    border-color: var(--color-gold-light);
+    box-shadow: 0 6px 24px rgba(200,146,42,0.38);
+}
+
+.btn-outline {
+    background-color: transparent;
+    color: var(--color-cream);
+    border-color: rgba(253,246,236,0.38);
+}
+
+.btn-outline:hover {
+    background-color: rgba(253,246,236,0.08);
+    border-color: var(--color-cream);
+}
+
+/* Animated scroll hint at the bottom of the hero */
+.scroll-hint {
+    position: absolute;
+    bottom: var(--space-md);
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    color: rgba(253,246,236,0.35);
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.scroll-arrow-wrap {
+    width: 20px;
+    height: 28px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.scroll-arrow {
+    display: block;
+    width: 10px;
+    height: 10px;
+    border-right: 1.5px solid rgba(253,246,236,0.35);
+    border-bottom: 1.5px solid rgba(253,246,236,0.35);
+    transform: rotate(45deg);
+    animation: scrollBounce 1.7s ease-in-out infinite;
+}
+
+@keyframes scrollBounce {
+    0%, 100% { transform: rotate(45deg) translateY(0);   opacity: 0.35; }
+    50%       { transform: rotate(45deg) translateY(7px); opacity: 0.9; }
+}
+
+
+/* ================================================
+   7. ENTRANCE ANIMATIONS
+   Elements start invisible (opacity: 0, moved down).
+   JS adds 'page-loaded' to <body> after loader ends.
+   That triggers the fadeUp animation with staggered delays.
+   ================================================ */
+.animate-in {
+    opacity: 0;
+    transform: translateY(22px);
+}
+
+/* When body gets page-loaded, all .animate-in elements animate */
+body.page-loaded .animate-in {
+    animation: fadeUp 0.7s ease forwards;
+}
+
+body.page-loaded .delay-1 { animation-delay: 0.05s; }
+body.page-loaded .delay-2 { animation-delay: 0.18s; }
+body.page-loaded .delay-3 { animation-delay: 0.30s; }
+body.page-loaded .delay-4 { animation-delay: 0.42s; }
+body.page-loaded .delay-5 { animation-delay: 0.54s; }
+body.page-loaded .delay-6 { animation-delay: 0.66s; }
+body.page-loaded .delay-7 { animation-delay: 0.82s; }
+
+@keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+}
+
+
+/* ================================================
+   8. SECTION PANELS — shared styles
+   ================================================ */
+.section-panel {
+    padding: var(--space-xl) 0;
+}
+
+.section-panel--tinted {
+    background-color: var(--color-green-pale);
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: var(--space-lg);
+}
+
+/* Section title with decorative gold underline */
+.section-title {
+    font-family: var(--font-heading);
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    font-weight: 700;
+    color: var(--color-green-deep);
+    display: inline-block;
+    position: relative;
+}
+
+.section-title::after {
+    content: '';
+    display: block;
+    width: 48px;
+    height: 3px;
+    background-color: var(--color-gold);
+    border-radius: var(--radius-pill);
+    margin: 0.5rem auto 0;
+}
+
+.section-sub {
+    color: var(--color-text-muted);
+    font-size: 0.98rem;
+    margin-top: var(--space-sm);
+}
+
+
+/* ================================================
+   9. DISH CARDS (Menu section)
+   ================================================ */
+.dish-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--space-md);
+}
+
+.dish-card {
+    background-color: var(--color-white);
+    border-radius: var(--radius-md);
+    padding: var(--space-md);
+    text-align: center;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid rgba(0,0,0,0.05);
+    transition: transform var(--transition-normal),
+                box-shadow var(--transition-normal);
+}
+
+.dish-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-md);
+}
+
+.dish-icon {
+    font-size: 2.8rem;
+    margin-bottom: var(--space-sm);
+}
+
+.dish-name {
+    font-family: var(--font-heading);
+    font-size: 1.15rem;
+    color: var(--color-green-deep);
+    margin-bottom: var(--space-xs);
+}
+
+.dish-desc {
+    font-size: 0.87rem;
+    color: var(--color-text-muted);
+    line-height: 1.65;
+}
+
+/* The "More Coming Soon" card has a dashed border */
+.dish-card--more {
+    border: 1.5px dashed rgba(0,0,0,0.13);
+    background-color: transparent;
+}
+
+.dish-card--more:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+
+/* ================================================
+   10. ABOUT SECTION
+   ================================================ */
+.about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-lg);
+    align-items: center;
+}
+
+/* Override default centered title alignment for about section */
+.about-text .section-title {
+    display: block;
+}
+
+.about-text .section-title::after {
+    margin: 0.5rem 0 0;   /* left-align the gold bar */
+}
+
+.about-text p {
+    color: var(--color-text-mid);
+    margin-top: var(--space-sm);
+    line-height: 1.85;
+}
+
+.about-values {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-sm);
+}
+
+.value-item {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    background-color: var(--color-white);
+    border-radius: var(--radius-md);
+    padding: var(--space-sm) var(--space-md);
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--color-green-deep);
+    box-shadow: var(--shadow-sm);
+}
+
+.value-icon { font-size: 1.35rem; }
+
+
+/* ================================================
+   11. CONTACT SECTION
+   ================================================ */
+.contact-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: var(--space-md);
+}
+
+.contact-card {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-sm);
+    background-color: var(--color-white);
+    border-radius: var(--radius-md);
+    padding: var(--space-md);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid rgba(0,0,0,0.04);
+}
+
+.contact-icon {
+    font-size: 1.8rem;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.contact-details strong {
+    display: block;
+    font-size: 0.76rem;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--color-green-mid);
+    margin-bottom: 5px;
+}
+
+.contact-details p {
+    font-size: 0.9rem;
+    color: var(--color-text-mid);
+    line-height: 1.65;
+}
+
+.insta-link {
+    color: var(--color-gold);
+    font-weight: 500;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: color var(--transition-fast);
+}
+
+.insta-link:hover { color: var(--color-green-mid); }
+
+
+/* ================================================
+   12. FOOTER
+   ================================================ */
+.site-footer {
+    background-color: var(--color-green-deep);
+    color: rgba(253,246,236,0.55);
+    padding: var(--space-lg) 0;
+    text-align: center;
+}
+
+.footer-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.footer-brand {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-cream);
+}
+
+.footer-tagline {
+    font-style: italic;
+    font-size: 0.9rem;
+    color: #9ec49a;
+}
+
+.footer-links a {
+    color: var(--color-gold-light);
+    font-size: 0.85rem;
+    font-weight: 500;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: color var(--transition-fast);
+}
+
+.footer-links a:hover { color: var(--color-white); }
+
+.footer-copy {
+    font-size: 0.77rem;
+    margin-top: var(--space-xs);
+}
+
+
+/* ================================================
+   13. RESPONSIVE DESIGN — Mobile
+   ================================================ */
+@media (max-width: 768px) {
+
+    /* Show hamburger, hide horizontal nav */
+    .nav-toggle {
+        display: flex;
+        z-index: 10;
+    }
+
+    /* Mobile nav dropdown */
+    .nav-links {
+        position: absolute;
+        top: var(--navbar-height);
+        left: 0; right: 0;
+        background-color: var(--color-cream);
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0;
+        padding: var(--space-xs) 0;
+        box-shadow: var(--shadow-md);
+        /* Clip from top to hide — revealed when .open is added */
+        clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+        transition: clip-path 0.35s ease;
+    }
+
+    .nav-links.open {
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    }
+
+    .nav-links a {
+        display: block;
+        padding: 0.85rem var(--space-md);
+        color: var(--color-text-mid) !important;
+        text-align: center;
+        font-size: 1rem;
+        border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+
+    .nav-links a::after { display: none; }
+
+    /* Stack the about grid */
+    .about-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-md);
+    }
+
+    /* Left-align underline when stacked */
+    .about-text .section-title { display: inline-block; }
+}
+
+@media (max-width: 520px) {
+
+    .hero-actions {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .about-values {
+        grid-template-columns: 1fr;
+    }
+
+    .dish-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .section-panel {
+        padding: var(--space-lg) 0;
+    }
+}
+
+
+/* ================================================
+   14. GRAND OPENING BANNER STRIP
+   Full-width section between hero and menu.
+   Deep green → mid-green gradient background.
+   ================================================ */
+.grand-opening-strip {
+    background: linear-gradient(135deg, var(--color-green-deep) 0%, var(--color-green-mid) 100%);
+    padding: var(--space-lg) 0;
+    text-align: center;
+}
+
+.gos-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+/* Small label pill */
+.gos-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-gold-light);
+    background-color: rgba(200,146,42,0.14);
+    border: 1px solid rgba(200,146,42,0.3);
+    padding: 0.3em 1.2em;
+    border-radius: var(--radius-pill);
+}
+
+/* The big "50% OFF" number — most impactful element */
+.gos-offer {
+    font-family: var(--font-heading);
+    font-size: clamp(2.8rem, 7vw, 5rem);
+    font-weight: 700;
+    color: var(--color-gold-light);
+    line-height: 1;
+}
+
+.gos-offer strong {
+    color: var(--color-gold-light);
+}
+
+/* "18th & 19th September only" */
+.gos-date {
+    font-size: clamp(1rem, 2.5vw, 1.3rem);
+    font-weight: 600;
+    color: var(--color-cream);
+    letter-spacing: 0.02em;
+}
+
+/* Smaller supporting text */
+.gos-sub {
+    font-size: 0.88rem;
+    color: rgba(253,246,236,0.55);
+}
+
+
+/* ================================================
+   15. SCROLL REVEAL ANIMATIONS
+   Elements with class 'reveal' start hidden.
+   JS (Intersection Observer) adds 'visible'
+   when they scroll into the viewport.
+   ================================================ */
+
+/* Starting state: invisible and shifted down */
+.reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.65s ease,
+                transform 0.65s ease;
+}
+
+/* Ending state: fully visible, in normal position */
+.reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Stagger delays — used on sibling elements (e.g. cards) */
+.reveal-delay-1 { transition-delay: 0.10s; }
+.reveal-delay-2 { transition-delay: 0.22s; }
+.reveal-delay-3 { transition-delay: 0.34s; }
+.reveal-delay-4 { transition-delay: 0.46s; }
+
+/* On mobile, reduce motion slightly for performance */
+@media (prefers-reduced-motion: reduce) {
+    .reveal {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
+}
+
+
+/* ================================================
+   16. WHATSAPP FLOATING BUTTON
+   Fixed position, bottom-right corner.
+   CIRCLE in default state. Expands on hover.
+
+   Math for perfect circle:
+     icon: 26px wide/tall
+     side padding: 15px each side
+     total: 15 + 26 + 15 = 56px = height
+     border-radius: 100px → perfect circle ✓
+   ================================================ */
+.whatsapp-btn {
+    position: fixed;
+    bottom: 1.75rem;
+    right: 1.75rem;
+    z-index: 500;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;  /* MUST be flex-start — center clips icon left edge */
+    gap: 0.6rem;
+    background-color: #25d366;   /* official WhatsApp green */
+    color: #fff;
+    /* Fixed dimensions → perfect circle when collapsed */
+    height: 56px;
+    min-width: 56px;
+    max-width: 56px;             /* only show icon initially */
+    padding: 0 15px;             /* 15+26+15 = 56px = height ✓ */
+    border-radius: 100px;
+    box-shadow: 0 4px 20px rgba(37, 211, 102, 0.45);
+    font-weight: 600;
+    font-size: 0.88rem;
+    overflow: hidden;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: max-width 0.42s cubic-bezier(0.4, 0, 0.2, 1),
+                min-width 0.42s cubic-bezier(0.4, 0, 0.2, 1),
+                padding   0.35s ease,
+                box-shadow 0.2s ease,
+                transform  0.2s ease;
+}
+
+/* Expanded state — slides open to show the label */
+.whatsapp-btn:hover {
+    max-width: 240px;
+    min-width: 160px;
+    padding: 0 20px;
+    justify-content: flex-start;
+    box-shadow: 0 6px 28px rgba(37, 211, 102, 0.55);
+    transform: translateY(-2px);
+}
+
+/* Icon: always visible, never clipped */
+.wa-icon {
+    width: 26px;
+    height: 26px;
+    flex-shrink: 0;
+}
+
+/* Text: hidden by overflow; fades in slightly after expand starts */
+.wa-text {
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.2s ease 0.2s;   /* delayed so it fades in after expand */
+}
+
+.whatsapp-btn:hover .wa-text {
+    opacity: 1;
+}
+
+/* On mobile: keep circle, larger tap target */
+@media (max-width: 768px) {
+    .whatsapp-btn {
+        bottom: 1.25rem;
+        right: 1.25rem;
+        height: 58px;
+        min-width: 58px;
+        max-width: 58px;
+        padding: 0 16px;
+    }
+
+    /* Never expand on touch devices — tap = action, no hover */
+    .whatsapp-btn:hover {
+        max-width: 58px;
+        min-width: 58px;
+        padding: 0 16px;
+        justify-content: center;
+        transform: none;
+    }
+
+    .whatsapp-btn:hover .wa-text {
+        opacity: 0;
+    }
+}
+
+
+/* ================================================
+   17. ACTIVE NAV LINK
+   Highlighted when the current page matches the link.
+   Jinja2 in base.html adds the 'active' class.
+   ================================================ */
+.nav-links a.active {
+    color: var(--color-gold-light) !important;
+}
+
+.nav-links a.active::after {
+    width: 100% !important;
+    background-color: var(--color-gold-light) !important;
+}
+
+/* On scrolled navbar, active link is green */
+.navbar.scrolled .nav-links a.active {
+    color: var(--color-green-mid) !important;
+}
+
+.navbar.scrolled .nav-links a.active::after {
+    background-color: var(--color-green-mid) !important;
+}
+
+
+/* ================================================
+   18. SECTION CTA (homepage "See Full Menu" button)
+   ================================================ */
+.section-cta {
+    text-align: center;
+    margin-top: var(--space-lg);
+}
+
+/* Green-on-cream button variant used inside light sections */
+.btn-green {
+    background-color: var(--color-green-mid);
+    color: var(--color-white);
+    border-color: var(--color-green-mid);
+    display: inline-block;
+    padding: 0.75rem 2rem;
+    border-radius: var(--radius-pill);
+    font-size: 0.93rem;
+    font-weight: 600;
+    border: 2px solid transparent;
+    transition: transform var(--transition-fast),
+                box-shadow var(--transition-fast),
+                background-color var(--transition-fast);
+}
+
+.btn-green:hover {
+    background-color: var(--color-green-light);
+    border-color: var(--color-green-light);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(45,90,39,0.3);
+}
+
+
+/* ================================================
+   19. MAPS LINK (inside contact card)
+   ================================================ */
+.maps-link {
+    display: inline-block;
+    margin-top: var(--space-xs);
+    font-size: 0.82rem;
+    color: var(--color-green-mid);
+    font-weight: 500;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: color var(--transition-fast);
+}
+
+.maps-link:hover { color: var(--color-gold); }
+
+
+/* ================================================
+   20. FOOTER LINKS (side-by-side gap)
+   ================================================ */
+.footer-links {
+    display: flex;
+    gap: var(--space-md);
+    align-items: center;
+}
+
+
+/* ================================================
+   21. MENU PAGE — Page Hero Banner
+   Smaller than homepage hero: just a title strip.
+   ================================================ */
+.page-hero {
+    background: linear-gradient(135deg, var(--color-green-deep) 0%, var(--color-green-mid) 100%);
+    color: var(--color-cream);
+    text-align: center;
+    /* Push content below the fixed navbar */
+    padding: calc(var(--navbar-height) + var(--space-lg)) 0 var(--space-lg);
+}
+
+.page-hero-title {
+    font-family: var(--font-heading);
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 700;
+    color: var(--color-cream);
+    margin-bottom: var(--space-xs);
+}
+
+.page-hero-sub {
+    color: rgba(253,246,236,0.68);
+    font-size: 1rem;
+    font-style: italic;
+}
+
+
+/* ================================================
+   22. MENU PAGE — Menu Note Bar
+   ================================================ */
+.menu-note {
+    background-color: var(--color-green-pale);
+    border-left: 3px solid var(--color-green-mid);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    padding: var(--space-sm) var(--space-md);
+    margin: var(--space-md) 0;
+    font-size: 0.88rem;
+    color: var(--color-green-mid);
+    line-height: 1.7;
+}
+
+
+/* ================================================
+   23. MENU PAGE — Menu Item Cards
+   ================================================ */
+.menu-item-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+    gap: var(--space-md);
+}
+
+.menu-item-card {
+    background-color: var(--color-white);
+    border-radius: var(--radius-md);
+    padding: var(--space-md);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid rgba(0,0,0,0.05);
+    transition: transform var(--transition-normal),
+                box-shadow var(--transition-normal);
+}
+
+.menu-item-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+}
+
+/* Placeholder cards get a dashed border to signal "coming soon" */
+.menu-item-card--placeholder {
+    border: 1.5px dashed rgba(0,0,0,0.12);
+    background-color: transparent;
+    box-shadow: none;
+}
+
+.menu-item-card--placeholder:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+/* Card header: name on left, price badge on right */
+.mic-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-xs);
+    flex-wrap: wrap;
+}
+
+.mic-name {
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--color-green-deep);
+}
+
+/* Price shown as a small gold badge */
+.mic-price {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--color-gold);
+    background-color: rgba(200,146,42,0.09);
+    padding: 0.15em 0.6em;
+    border-radius: var(--radius-pill);
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.mic-desc {
+    font-size: 0.87rem;
+    color: var(--color-text-muted);
+    line-height: 1.68;
+}
+
+/* WhatsApp button variant used inside the menu page CTA section */
+.btn-whatsapp {
+    background-color: #25d366;
+    color: #fff;
+    border-color: #25d366;
+    display: inline-block;
+    padding: 0.75rem 2rem;
+    border-radius: var(--radius-pill);
+    font-size: 0.93rem;
+    font-weight: 600;
+    border: 2px solid transparent;
+    transition: transform var(--transition-fast),
+                box-shadow var(--transition-fast),
+                background-color var(--transition-fast);
+}
+
+.btn-whatsapp:hover {
+    background-color: #1da851;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(37,211,102,0.35);
+}
+
+
+/* ================================================
+   24. SOUTH INDIAN BACKGROUND FLOAT ANIMATIONS
+   Emoji elements float upward through the hero.
+   Contained inside hero (overflow: hidden).
+   opacity: 0.07 — visible but never distracting.
+
+   Elements chosen:
+     🌿  Fresh leaves  — nature/freshness
+     🥥  Coconut       — South Indian staple ingredient
+     🌺  Hibiscus      — iconic South Indian flower
+     🍃  Leaf          — tropical greenery
+     ☕  Coffee        — South Indian filter coffee
+     ✦   Star          — decorative / auspicious
+     🌸  Flower        — floral, warm
+   ================================================ */
+.bg-floats {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;       /* behind hero-content (z-index: 1) */
+    overflow: hidden;
+}
+
+.bg-float {
+    position: absolute;
+    bottom: -80px;    /* start off-screen below */
+    opacity: 0;
+    animation: bgFloat linear infinite;
+    user-select: none;
+    will-change: transform, opacity;
+    filter: saturate(0.4) brightness(1.4); /* desaturate slightly to blend with dark bg */
+}
+
+/* Positions, sizes and timing — staggered for organic feel */
+.bg-float:nth-child(1)  { left: 7%;  font-size: 1.8rem; animation-duration: 17s; animation-delay: 0s;   }
+.bg-float:nth-child(2)  { left: 15%; font-size: 1.3rem; animation-duration: 23s; animation-delay: 3.5s; }
+.bg-float:nth-child(3)  { left: 26%; font-size: 1.6rem; animation-duration: 14s; animation-delay: 7s;   }
+.bg-float:nth-child(4)  { left: 33%; font-size: 2.1rem; animation-duration: 20s; animation-delay: 1.5s; }
+.bg-float:nth-child(5)  { left: 43%; font-size: 1.3rem; animation-duration: 16s; animation-delay: 9s;   }
+.bg-float:nth-child(6)  { left: 54%; font-size: 1.7rem; animation-duration: 25s; animation-delay: 4s;   }
+.bg-float:nth-child(7)  { left: 61%; font-size: 2.2rem; animation-duration: 13s; animation-delay: 2s;   }
+.bg-float:nth-child(8)  { left: 69%; font-size: 1.5rem; animation-duration: 21s; animation-delay: 11s;  }
+.bg-float:nth-child(9)  { left: 77%; font-size: 1.4rem; animation-duration: 15s; animation-delay: 5.5s; }
+.bg-float:nth-child(10) { left: 84%; font-size: 1.9rem; animation-duration: 19s; animation-delay: 8s;   }
+.bg-float:nth-child(11) { left: 91%; font-size: 1.6rem; animation-duration: 24s; animation-delay: 6.5s; }
+.bg-float:nth-child(12) { left: 20%; font-size: 1.2rem; animation-duration: 12s; animation-delay: 14s;  }
+.bg-float:nth-child(13) { left: 47%; font-size: 1.8rem; animation-duration: 22s; animation-delay: 16s;  }
+.bg-float:nth-child(14) { left: 72%; font-size: 2.0rem; animation-duration: 18s; animation-delay: 10s;  }
+.bg-float:nth-child(15) { left: 38%; font-size: 1.5rem; animation-duration: 26s; animation-delay: 13s;  }
+
+/* The float animation: rise from bottom, drift sideways, rotate gently */
+@keyframes bgFloat {
+    0% {
+        transform: translateY(0) translateX(0) rotate(0deg);
+        opacity: 0;
+    }
+    8% {
+        /* Fade in quickly at start */
+        opacity: 0.07;
+    }
+    /* Gentle side-to-side drift midway */
+    40% {
+        transform: translateY(-40vh) translateX(22px) rotate(10deg);
+    }
+    70% {
+        transform: translateY(-75vh) translateX(-12px) rotate(-6deg);
+        opacity: 0.07;
+    }
+    92% {
+        opacity: 0.04;
+    }
+    100% {
+        /* Exit off the top of the hero */
+        transform: translateY(-108vh) translateX(8px) rotate(5deg);
+        opacity: 0;
+    }
+}
+
+
+/* ================================================
+   25. REDUCED MOTION — disable floats for
+   users who prefer less animation (accessibility)
+   ================================================ */
+@media (prefers-reduced-motion: reduce) {
+    .bg-float {
+        animation: none;
+        display: none;
+    }
+}

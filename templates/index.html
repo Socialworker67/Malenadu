@@ -1,0 +1,240 @@
+{# index.html — Malenadu Tiffin Homepage
+   Extends base.html which provides the navbar, footer,
+   WhatsApp button, and all shared HTML structure.
+   This file only contains what is UNIQUE to the homepage. #}
+{% extends "base.html" %}
+
+{% block page_title %}Home{% endblock %}
+
+{% block meta_desc %}Malenadu Tiffin – Authentic South Indian tiffin in Pune. Grand Opening 18th September. Flat 50% OFF on 18th &amp; 19th September.{% endblock %}
+
+{# LOADER — only the homepage has the boot animation #}
+{% block loader %}
+<div id="loader" class="loader" aria-hidden="true">
+    <div class="loader-inner">
+        <p class="loader-brand">Malenadu Tiffin</p>
+        <p class="loader-sub">Bringing Malenadu to your plate</p>
+        <div class="loader-bar"><div class="loader-fill"></div></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+
+    <!-- =============================================
+         HERO SECTION
+    ============================================= -->
+    <section id="hero" class="hero">
+    <!-- Floating background elements
+         South Indian nature + food themes: coconut, leaves, hibiscus, coffee.
+         Contained inside hero by overflow:hidden. z-index:0 so they're behind content.
+         CSS controls position, timing, opacity (0.07) — never distracting.
+    -->
+    <div class="bg-floats" aria-hidden="true">
+        <span class="bg-float">🌿</span>
+        <span class="bg-float">🥥</span>
+        <span class="bg-float">🌺</span>
+        <span class="bg-float">🍃</span>
+        <span class="bg-float">☕</span>
+        <span class="bg-float">🌿</span>
+        <span class="bg-float">✦</span>
+        <span class="bg-float">🥥</span>
+        <span class="bg-float">🌸</span>
+        <span class="bg-float">🍃</span>
+        <span class="bg-float">🌺</span>
+        <span class="bg-float">☕</span>
+        <span class="bg-float">🌿</span>
+        <span class="bg-float">✦</span>
+        <span class="bg-float">🌸</span>
+    </div>
+
+    <div class="hero-blob hero-blob--1" aria-hidden="true"></div>
+    <div class="hero-blob hero-blob--2" aria-hidden="true"></div>
+
+        <div class="container hero-content">
+
+            <div class="opening-badge animate-in delay-1">
+                ✦ Grand Opening &nbsp;·&nbsp; 18th September ✦
+            </div>
+
+            <h1 class="hero-title animate-in delay-2">
+                Malenadu<br />Tiffin
+            </h1>
+
+            <p class="hero-tagline animate-in delay-3">
+                Bringing Malenadu to your plate
+            </p>
+
+            <p class="hero-sub animate-in delay-4">
+                Authentic South Indian flavours — fresh, pure, made with love.
+                <br />
+                <span class="hero-location">📍 Tilekar Nagar, Pune</span>
+            </p>
+
+            <div class="hero-offer animate-in delay-5">
+                🎉 Flat <strong>50% OFF</strong> on 18th &amp; 19th September
+            </div>
+
+            <div class="hero-actions animate-in delay-6">
+                <a href="/menu" class="btn btn-primary">View Menu</a>
+                <a href="#contact" class="btn btn-outline">Find Us</a>
+            </div>
+
+        </div>
+
+        <div class="scroll-hint animate-in delay-7" aria-hidden="true">
+            <span class="scroll-hint-text">Scroll</span>
+            <div class="scroll-arrow-wrap">
+                <span class="scroll-arrow"></span>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- =============================================
+         GRAND OPENING BANNER
+    ============================================= -->
+    <section class="grand-opening-strip" aria-label="Grand Opening Offer">
+        <div class="container">
+            <div class="gos-inner">
+                <span class="gos-label">Grand Opening Special</span>
+                <p class="gos-offer">Flat <strong>50% OFF</strong></p>
+                <p class="gos-date">18th &amp; 19th September only</p>
+                <p class="gos-sub">On all orders at Malenadu Tiffin, Tilekar Nagar, Pune</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- =============================================
+         MENU PREVIEW
+    ============================================= -->
+    <section id="menu" class="section-panel">
+        <div class="container">
+
+            <div class="section-header reveal">
+                <h2 class="section-title">Our Specialities</h2>
+                <p class="section-sub">Handcrafted every morning with the finest ingredients.</p>
+            </div>
+
+            <div class="dish-grid">
+                <article class="dish-card reveal reveal-delay-1">
+                    <div class="dish-icon" aria-hidden="true">🫓</div>
+                    <h3 class="dish-name">Benne Dosa</h3>
+                    <p class="dish-desc">Golden, crisp and kissed with fresh butter.</p>
+                </article>
+                <article class="dish-card reveal reveal-delay-2">
+                    <div class="dish-icon" aria-hidden="true">🍮</div>
+                    <h3 class="dish-name">Tatte Idli</h3>
+                    <p class="dish-desc">Thick, soft and cloud-like — a Malenadu classic.</p>
+                </article>
+                <article class="dish-card reveal reveal-delay-3">
+                    <div class="dish-icon" aria-hidden="true">☕</div>
+                    <h3 class="dish-name">Filter Coffee</h3>
+                    <p class="dish-desc">Slow-brewed, strong and deeply aromatic.</p>
+                </article>
+                <article class="dish-card dish-card--more reveal reveal-delay-4">
+                    <div class="dish-icon" aria-hidden="true">🍽️</div>
+                    <h3 class="dish-name">More Soon</h3>
+                    <p class="dish-desc">[MENU ITEMS TO BE ADDED]</p>
+                </article>
+            </div>
+
+            <div class="section-cta reveal">
+                <a href="/menu" class="btn btn-green">See Full Menu</a>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- =============================================
+         ABOUT SECTION
+    ============================================= -->
+    <section id="about" class="section-panel section-panel--tinted">
+        <div class="container about-grid">
+
+            <div class="about-text reveal">
+                <h2 class="section-title">Our Story</h2>
+                <p>Malenadu Tiffin brings the warm, unhurried flavours of Karnataka's Malenadu region to the heart of Pune. Every dish is made fresh each morning — no preservatives, no shortcuts.</p>
+                <p>We believe good food is honest food: real ingredients, real taste, real love.</p>
+            </div>
+
+            <div class="about-values reveal reveal-delay-2">
+                <div class="value-item">
+                    <span class="value-icon" aria-hidden="true">🌿</span>
+                    <span>Fresh Every Day</span>
+                </div>
+                <div class="value-item">
+                    <span class="value-icon" aria-hidden="true">🤍</span>
+                    <span>Made with Love</span>
+                </div>
+                <div class="value-item">
+                    <span class="value-icon" aria-hidden="true">✨</span>
+                    <span>Authentic Recipes</span>
+                </div>
+                <div class="value-item">
+                    <span class="value-icon" aria-hidden="true">🏡</span>
+                    <span>Homely Warmth</span>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- =============================================
+         CONTACT / FIND US SECTION
+    ============================================= -->
+    <section id="contact" class="section-panel">
+        <div class="container">
+
+            <div class="section-header reveal">
+                <h2 class="section-title">Find Us</h2>
+                <p class="section-sub">We'd love to serve you — come visit us.</p>
+            </div>
+
+            <div class="contact-grid">
+
+                <div class="contact-card reveal reveal-delay-1">
+                    <span class="contact-icon" aria-hidden="true">📍</span>
+                    <div class="contact-details">
+                        <strong>Address</strong>
+                        <p>Shop No. 17, Aradhyam Society,<br />Katraj–Kondhwa Road,<br />Tilekar Nagar, Pune</p>
+                        <a href="https://maps.google.com/?q=Aradhyam+Society+Katraj+Kondhwa+Road+Tilekar+Nagar+Pune"
+                           target="_blank" rel="noopener noreferrer"
+                           class="maps-link">View on Google Maps ↗</a>
+                    </div>
+                </div>
+
+                <div class="contact-card reveal reveal-delay-2">
+                    <span class="contact-icon" aria-hidden="true">📞</span>
+                    <div class="contact-details">
+                        <strong>Phone &amp; WhatsApp</strong>
+                        <p>[PHONE NUMBER TO BE ADDED]</p>
+                    </div>
+                </div>
+
+                <div class="contact-card reveal reveal-delay-3">
+                    <span class="contact-icon" aria-hidden="true">🕐</span>
+                    <div class="contact-details">
+                        <strong>Opening Hours</strong>
+                        <p>[OPENING HOURS TO BE ADDED]</p>
+                    </div>
+                </div>
+
+                <div class="contact-card reveal reveal-delay-4">
+                    <span class="contact-icon" aria-hidden="true">📸</span>
+                    <div class="contact-details">
+                        <strong>Follow Us</strong>
+                        <p>
+                            <a href="https://www.instagram.com/malenadu_tiffin.pune/"
+                               target="_blank" rel="noopener noreferrer"
+                               class="insta-link">@malenadu_tiffin.pune</a>
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+{% endblock %}

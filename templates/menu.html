@@ -1,0 +1,182 @@
+﻿{# menu.html — Malenadu Tiffin Full Menu Page
+   Extends base.html. No loader on this page.
+   The navbar starts solid (no hero section). #}
+{% extends "base.html" %}
+
+{% block page_title %}Menu{% endblock %}
+
+{% block meta_desc %}Full menu at Malenadu Tiffin – Benne Dosa, Tatte Idli, Filter Coffee and authentic South Indian dishes in Tilekar Nagar, Pune.{% endblock %}
+
+{% block content %}
+
+    <!-- =============================================
+         PAGE HERO BANNER
+         Smaller than the homepage hero — just a
+         title banner to establish the page context.
+    ============================================= -->
+    <section class="page-hero">
+        <div class="container">
+            <h1 class="page-hero-title">Our Menu</h1>
+            <p class="page-hero-sub">Fresh, authentic South Indian tiffin — made every morning.</p>
+        </div>
+    </section>
+
+    <!-- Menu availability note -->
+    <div class="container">
+        <div class="menu-note reveal">
+            🌿 Our menu is freshly prepared each day. Items and prices are subject to change and availability.
+            Items marked <em>[TO BE ADDED]</em> will be updated before opening.
+        </div>
+    </div>
+
+    <!-- =============================================
+         DOSA
+    ============================================= -->
+    <section class="section-panel">
+        <div class="container">
+
+            <div class="section-header reveal">
+                <h2 class="section-title">Dosa</h2>
+                <p class="section-sub">Crisp on the outside, soft on the inside.</p>
+            </div>
+
+            <div class="menu-item-grid">
+
+                <div class="menu-item-card reveal reveal-delay-1">
+                    <div class="mic-header">
+                        <h3 class="mic-name">Benne Dosa</h3>
+                        <span class="mic-price">[PRICE TO BE ADDED]</span>
+                    </div>
+                    <p class="mic-desc">Golden, crisp and kissed with fresh butter. A Malenadu signature — simple, honest, unforgettable.</p>
+                </div>
+
+                <div class="menu-item-card menu-item-card--placeholder reveal reveal-delay-2">
+                    <div class="mic-header">
+                        <h3 class="mic-name">[MENU ITEM TO BE ADDED]</h3>
+                        <span class="mic-price">[PRICE]</span>
+                    </div>
+                    <p class="mic-desc">[DESCRIPTION TO BE ADDED]</p>
+                </div>
+
+                <div class="menu-item-card menu-item-card--placeholder reveal reveal-delay-3">
+                    <div class="mic-header">
+                        <h3 class="mic-name">[MENU ITEM TO BE ADDED]</h3>
+                        <span class="mic-price">[PRICE]</span>
+                    </div>
+                    <p class="mic-desc">[DESCRIPTION TO BE ADDED]</p>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- =============================================
+         IDLI
+    ============================================= -->
+    <section class="section-panel section-panel--tinted">
+        <div class="container">
+
+            <div class="section-header reveal">
+                <h2 class="section-title">Idli</h2>
+                <p class="section-sub">Soft, steamed and straight from the heart.</p>
+            </div>
+
+            <div class="menu-item-grid">
+
+                <div class="menu-item-card reveal reveal-delay-1">
+                    <div class="mic-header">
+                        <h3 class="mic-name">Tatte Idli</h3>
+                        <span class="mic-price">[PRICE TO BE ADDED]</span>
+                    </div>
+                    <p class="mic-desc">Thick, soft and cloud-like — the traditional Malenadu Idli, larger and fluffier than the regular kind.</p>
+                </div>
+
+                <div class="menu-item-card menu-item-card--placeholder reveal reveal-delay-2">
+                    <div class="mic-header">
+                        <h3 class="mic-name">[MENU ITEM TO BE ADDED]</h3>
+                        <span class="mic-price">[PRICE]</span>
+                    </div>
+                    <p class="mic-desc">[DESCRIPTION TO BE ADDED]</p>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- =============================================
+         BEVERAGES
+    ============================================= -->
+    <section class="section-panel">
+        <div class="container">
+
+            <div class="section-header reveal">
+                <h2 class="section-title">Beverages</h2>
+                <p class="section-sub">The perfect companion to your tiffin.</p>
+            </div>
+
+            <div class="menu-item-grid">
+
+                <div class="menu-item-card reveal reveal-delay-1">
+                    <div class="mic-header">
+                        <h3 class="mic-name">Filter Coffee</h3>
+                        <span class="mic-price">[PRICE TO BE ADDED]</span>
+                    </div>
+                    <p class="mic-desc">Slow-brewed in the traditional South Indian way. Strong, aromatic and deeply satisfying.</p>
+                </div>
+
+                <div class="menu-item-card menu-item-card--placeholder reveal reveal-delay-2">
+                    <div class="mic-header">
+                        <h3 class="mic-name">[MENU ITEM TO BE ADDED]</h3>
+                        <span class="mic-price">[PRICE]</span>
+                    </div>
+                    <p class="mic-desc">[DESCRIPTION TO BE ADDED]</p>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- =============================================
+         SIDES & ACCOMPANIMENTS
+    ============================================= -->
+    <section class="section-panel section-panel--tinted">
+        <div class="container">
+
+            <div class="section-header reveal">
+                <h2 class="section-title">Sides &amp; Accompaniments</h2>
+                <p class="section-sub">The chutneys, sambars and extras that complete the plate.</p>
+            </div>
+
+            <div class="menu-item-grid">
+                <div class="menu-item-card menu-item-card--placeholder reveal reveal-delay-1">
+                    <div class="mic-header">
+                        <h3 class="mic-name">[MENU ITEMS TO BE ADDED]</h3>
+                        <span class="mic-price">[PRICE]</span>
+                    </div>
+                    <p class="mic-desc">[DESCRIPTION TO BE ADDED]</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- =============================================
+         CALL TO ACTION (bottom of menu page)
+    ============================================= -->
+    <section class="section-panel">
+        <div class="container" style="text-align: center;">
+            <p style="color: var(--color-text-muted); margin-bottom: var(--space-md);">
+                Want to place an order or ask a question?
+            </p>
+            <a href="https://wa.me/[WHATSAPP_NUMBER_TO_BE_ADDED]"
+               target="_blank" rel="noopener noreferrer"
+               class="btn btn-whatsapp">
+                💬 Order on WhatsApp
+            </a>
+        </div>
+    </section>
+
+{% endblock %}
