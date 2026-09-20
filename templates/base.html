@@ -1,4 +1,4 @@
-﻿{# =================================================
+{# =================================================
    base.html — Malenadu Tiffin
    The MASTER template. Every page extends this.
    Jinja2 {% block %} tags are slots that child
@@ -32,7 +32,26 @@
     <nav class="navbar" id="navbar">
         <div class="container nav-inner">
 
-            <a href="/" class="nav-brand">Malenadu Tiffin</a>
+            {# Location pin button — left of logo, links to Google Maps #}
+            <a href="https://maps.google.com/?q=Aradhyam+Society+Katraj+Kondhwa+Road+Tilekar+Nagar+Pune"
+               class="nav-location-btn"
+               id="navLocationBtn"
+               target="_blank"
+               rel="noopener noreferrer"
+               aria-label="View restaurant location on Google Maps"
+               title="Find us on Google Maps">
+                <svg class="nav-location-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                </svg>
+                <span class="nav-location-text">Find Us</span>
+            </a>
+
+            {# Brand logo — image replaces old text brand #}
+            <a href="/" class="nav-brand" aria-label="Malenadu Tiffin — Home">
+                <img src="{{ url_for('static', filename='images/logo.jpg') }}"
+                     alt="Malenadu Tiffin"
+                     class="nav-logo-img" />
+            </a>
 
             <button class="nav-toggle" id="navToggle"
                     aria-label="Toggle navigation menu"
@@ -55,12 +74,8 @@
     {# PAGE CONTENT — each child template fills this #}
     {% block content %}{% endblock %}
 
-    {# WHATSAPP FLOATING BUTTON
-       IMPORTANT: Replace the href below with your real WhatsApp number.
-       Format: https://wa.me/[CountryCode][Number] — no + or spaces.
-       Example for +91 98765 43210 → https://wa.me/919876543210
-    #}
-    <a href="https://wa.me/[WHATSAPP_NUMBER_TO_BE_ADDED]"
+    {# WHATSAPP FLOATING BUTTON — +91 8668633755 #}
+    <a href="https://wa.me/918668633755"
        class="whatsapp-btn"
        id="whatsappBtn"
        target="_blank"
@@ -77,13 +92,19 @@
     <footer class="site-footer">
         <div class="container footer-inner">
             <div>
-                <p class="footer-brand">Malenadu Tiffin</p>
+                <a href="/" class="footer-logo-link" aria-label="Malenadu Tiffin — Home">
+                    <img src="{{ url_for('static', filename='images/logo.jpg') }}"
+                         alt="Malenadu Tiffin"
+                         class="footer-logo-img" />
+                </a>
                 <p class="footer-tagline">Bringing Malenadu to your plate</p>
             </div>
             <nav class="footer-links" aria-label="Footer links">
                 <a href="/menu">Menu</a>
                 <a href="https://www.instagram.com/malenadu_tiffin.pune/"
                    target="_blank" rel="noopener noreferrer">Instagram</a>
+                <a href="https://wa.me/918668633755"
+                   target="_blank" rel="noopener noreferrer">WhatsApp</a>
             </nav>
             <p class="footer-copy">&copy; 2026 Malenadu Tiffin, Pune. All rights reserved.</p>
         </div>

@@ -207,19 +207,70 @@ ul[role="list"] { list-style: none; }
     height: var(--navbar-height);
 }
 
-/* Brand name in navbar */
-.nav-brand {
-    font-family: var(--font-heading);
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: var(--color-white);
-    letter-spacing: 0.02em;
-    transition: color var(--transition-fast);
+/* ---- Location pin button — left of logo ---- */
+.nav-location-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: rgba(255,255,255,0.82);
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    padding: 0.35rem 0.7rem;
+    border-radius: var(--radius-pill);
+    border: 1px solid rgba(255,255,255,0.18);
+    transition: background-color var(--transition-fast),
+                color var(--transition-fast),
+                border-color var(--transition-fast);
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
-.navbar.scrolled .nav-brand {
+.nav-location-btn:hover {
+    background-color: rgba(255,255,255,0.1);
+    color: var(--color-white);
+    border-color: rgba(255,255,255,0.35);
+}
+
+.navbar.scrolled .nav-location-btn {
+    color: var(--color-green-mid);
+    border-color: rgba(45,90,39,0.22);
+}
+
+.navbar.scrolled .nav-location-btn:hover {
+    background-color: var(--color-green-pale);
     color: var(--color-green-deep);
 }
+
+.nav-location-icon {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+}
+
+.nav-location-text {
+    display: inline;
+}
+
+/* Brand logo image in navbar */
+.nav-brand {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.nav-logo-img {
+    height: 44px;
+    width: auto;
+    display: block;
+    object-fit: contain;
+    /* The logo has a green bg — add subtle drop shadow to lift it */
+    filter: drop-shadow(0 1px 4px rgba(0,0,0,0.25));
+    border-radius: 6px;
+    transition: opacity var(--transition-fast);
+}
+
+.nav-logo-img:hover { opacity: 0.9; }
 
 /* Nav link list */
 .nav-links {
@@ -300,43 +351,47 @@ ul[role="list"] { list-style: none; }
     padding: var(--navbar-height) var(--space-md) var(--space-xl);
 }
 
-/* Dot grid — gives depth without an image */
+/* Hero with background image — storefront illustration */
+.hero--with-image {
+    background-image: url('/static/images/hero_bg.jpg');
+    background-size: cover;
+    background-position: center top;
+    background-repeat: no-repeat;
+}
+
+/* Dark green overlay — keeps text readable over the illustration */
+.hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        160deg,
+        rgba(16, 38, 14, 0.72) 0%,
+        rgba(22, 50, 18, 0.65) 40%,
+        rgba(10, 28, 8, 0.78) 100%
+    );
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* Dot grid — subtle texture over the image */
 .hero::before {
     content: '';
     position: absolute;
     inset: 0;
-    background-image: radial-gradient(rgba(255,255,255,0.04) 1px, transparent 1px);
+    background-image: radial-gradient(rgba(255,255,255,0.025) 1px, transparent 1px);
     background-size: 28px 28px;
     pointer-events: none;
+    z-index: 0;
 }
 
 /* Decorative radial blobs for visual warmth */
-.hero-blob {
-    position: absolute;
-    border-radius: 50%;
-    pointer-events: none;
-}
+/* Blobs removed — image background replaces them */
+.hero-blob { display: none; }
 
-.hero-blob--1 {
-    width: 560px;
-    height: 560px;
-    background: radial-gradient(circle, rgba(45,90,39,0.55) 0%, transparent 70%);
-    top: -130px;
-    right: -130px;
-}
-
-.hero-blob--2 {
-    width: 420px;
-    height: 420px;
-    background: radial-gradient(circle, rgba(200,146,42,0.10) 0%, transparent 70%);
-    bottom: -60px;
-    left: -80px;
-}
-
-/* All hero text content sits above the blobs */
+/* All hero text content sits above the overlay */
 .hero-content {
     position: relative;
-    z-index: 1;
+    z-index: 2;
     text-align: center;
     max-width: 720px;
     width: 100%;
@@ -473,6 +528,7 @@ ul[role="list"] { list-style: none; }
     font-size: 0.68rem;
     letter-spacing: 0.12em;
     text-transform: uppercase;
+    z-index: 2;
 }
 
 .scroll-arrow-wrap {
@@ -529,14 +585,47 @@ body.page-loaded .delay-7 { animation-delay: 0.82s; }
 
 
 /* ================================================
-   8. SECTION PANELS — shared styles
+   8. SECTION PANELS — shared styles + separation
    ================================================ */
 .section-panel {
     padding: var(--space-xl) 0;
+    position: relative;
 }
 
+/* Decorative top separator line between sections */
+.section-panel + .section-panel::before {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--color-gold), transparent);
+    border-radius: var(--radius-pill);
+}
+
+/* MENU section — warm cream */
+.section-panel--menu {
+    background-color: #fef9f2;
+    border-top: 1px solid rgba(200,146,42,0.12);
+    border-bottom: 1px solid rgba(200,146,42,0.1);
+}
+
+/* ABOUT section — soft green tint (existing) */
 .section-panel--tinted {
-    background-color: var(--color-green-pale);
+    background-color: #eef5ec;
+    border-top: 1px solid rgba(26,58,22,0.1);
+    border-bottom: 1px solid rgba(26,58,22,0.08);
+    box-shadow: inset 0 2px 12px rgba(26,58,22,0.04),
+                inset 0 -2px 12px rgba(26,58,22,0.04);
+}
+
+/* CONTACT section — warm earthy tint */
+.section-panel--contact {
+    background-color: #f7f2ea;
+    border-top: 1px solid rgba(200,146,42,0.14);
 }
 
 .section-header {
@@ -633,7 +722,34 @@ body.page-loaded .delay-7 { animation-delay: 0.82s; }
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: var(--space-lg);
+    align-items: start;
+}
+
+/* WhatsApp CTA inside the About section */
+.about-whatsapp {
+    margin-top: var(--space-md);
+    padding-top: var(--space-md);
+    border-top: 1px solid rgba(26,58,22,0.12);
+}
+
+.about-whatsapp-label {
+    font-size: 0.88rem;
+    color: var(--color-text-muted);
+    margin-bottom: 0.75rem;
+}
+
+.about-whatsapp-btn {
+    display: inline-flex;
     align-items: center;
+    gap: 0.55rem;
+    padding: 0.65rem 1.4rem;
+    font-size: 0.9rem;
+}
+
+.about-wa-icon {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
 }
 
 /* Override default centered title alignment for about section */
@@ -742,12 +858,23 @@ body.page-loaded .delay-7 { animation-delay: 0.82s; }
     gap: var(--space-sm);
 }
 
-.footer-brand {
-    font-family: var(--font-heading);
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--color-cream);
+/* Footer logo image */
+.footer-logo-link {
+    display: inline-block;
 }
+
+.footer-logo-img {
+    height: 64px;
+    width: auto;
+    display: block;
+    object-fit: contain;
+    border-radius: 8px;
+    margin: 0 auto;
+    opacity: 0.92;
+    transition: opacity var(--transition-fast);
+}
+
+.footer-logo-img:hover { opacity: 1; }
 
 .footer-tagline {
     font-style: italic;
@@ -781,6 +908,29 @@ body.page-loaded .delay-7 { animation-delay: 0.82s; }
     .nav-toggle {
         display: flex;
         z-index: 10;
+    }
+
+    /* Shrink logo on mobile */
+    .nav-logo-img {
+        height: 34px;
+    }
+
+    /* Location button: hide text, show only icon on small screens */
+    .nav-location-text {
+        display: none;
+    }
+
+    .nav-location-btn {
+        padding: 0.4rem;
+        border-radius: 50%;
+        width: 36px;
+        height: 36px;
+        justify-content: center;
+    }
+
+    .nav-location-icon {
+        width: 18px;
+        height: 18px;
     }
 
     /* Mobile nav dropdown */
@@ -822,6 +972,11 @@ body.page-loaded .delay-7 { animation-delay: 0.82s; }
 
     /* Left-align underline when stacked */
     .about-text .section-title { display: inline-block; }
+
+    /* Hero mobile: ensure image crops well */
+    .hero--with-image {
+        background-position: center center;
+    }
 }
 
 @media (max-width: 520px) {
@@ -1285,7 +1440,8 @@ body.page-loaded .delay-7 { animation-delay: 0.82s; }
     animation: bgFloat linear infinite;
     user-select: none;
     will-change: transform, opacity;
-    filter: saturate(0.4) brightness(1.4); /* desaturate slightly to blend with dark bg */
+    z-index: 1; /* above overlay (z-index:0), below content (z-index:2) */
+    filter: saturate(0.5) brightness(1.3); /* slight desaturate to blend with image bg */
 }
 
 /* Positions, sizes and timing — staggered for organic feel */
