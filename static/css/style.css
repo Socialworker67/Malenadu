@@ -351,24 +351,25 @@ ul[role="list"] { list-style: none; }
     padding: var(--navbar-height) var(--space-md) var(--space-xl);
 }
 
-/* Hero with background image — storefront illustration */
+/* Hero with background image
+   The image is on ::before so filter:blur applies only to the
+   background layer and NOT to the text/buttons above it. */
 .hero--with-image {
-    background-image: url('/static/images/hero_bg.jpg');
-    background-size: cover;
-    background-position: center top;
-    background-repeat: no-repeat;
+    /* background-color fallback while image loads */
+    background-color: var(--color-green-deep);
 }
 
-/* Soft vignette overlay — darkens only behind the text centre,
-   letting the illustration edges stay bright and visible */
+/* Overlay: soft vignette + flat dark base for text contrast.
+   The blur already softens the image, so the dark base is kept
+   light (~25%) — just enough to lift text off the background. */
 .hero-overlay {
     position: absolute;
     inset: 0;
     background:
         radial-gradient(
             ellipse 65% 55% at 50% 52%,
-            rgba(8, 22, 6, 0.60) 0%,
-            rgba(8, 22, 6, 0.25) 55%,
+            rgba(8, 22, 6, 0.50) 0%,
+            rgba(8, 22, 6, 0.18) 55%,
             transparent 80%
         ),
         linear-gradient(
@@ -376,15 +377,29 @@ ul[role="list"] { list-style: none; }
             rgba(8, 22, 6, 0.20) 0%,
             transparent 30%,
             transparent 65%,
-            rgba(8, 22, 6, 0.28) 100%
-        );
-    z-index: 0;
+            rgba(8, 22, 6, 0.22) 100%
+        ),
+        /* flat dark base that works across the whole image */
+        linear-gradient(rgba(0,0,0,0.25), rgba(0,0,0,0.25));
+    z-index: 1;     /* above the blurred ::before (z-index:0) */
     pointer-events: none;
 }
 
-/* Dot grid hidden when illustration bg is active — not needed */
+/* Blurred background image — ::before carries the image so
+   filter:blur() only affects the BG, never the foreground content.
+   inset:-20px is intentionally larger than the container;
+   overflow:hidden on .hero clips the blur edge artifacts cleanly. */
 .hero--with-image::before {
-    display: none;
+    content: '';
+    position: absolute;
+    inset: -20px;
+    background-image: url('/static/images/hero_bg.jpg');
+    background-size: cover;
+    background-position: center top;
+    background-repeat: no-repeat;
+    filter: blur(6px);
+    z-index: 0;
+    display: block; /* override any previous display:none */
 }
 
 /* Decorative radial blobs for visual warmth */
@@ -394,7 +409,7 @@ ul[role="list"] { list-style: none; }
 /* All hero text content sits above the overlay */
 .hero-content {
     position: relative;
-    z-index: 2;
+    z-index: 3;
     text-align: center;
     max-width: 720px;
     width: 100%;
@@ -536,7 +551,7 @@ ul[role="list"] { list-style: none; }
     font-size: 0.68rem;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    z-index: 2;
+    z-index: 3;
 }
 
 .scroll-arrow-wrap {
@@ -1445,7 +1460,7 @@ body.page-loaded .delay-7 { animation-delay: 0.82s; }
     position: absolute;
     inset: 0;
     pointer-events: none;
-    z-index: 0;       /* behind hero-content (z-index: 1) */
+    z-index: 2;       /* above overlay (z-index:1), below hero-content (z-index:3) */
     overflow: hidden;
 }
 
