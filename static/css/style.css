@@ -861,6 +861,28 @@ body.page-loaded .delay-7 { animation-delay: 0.82s; }
     margin-top: 2px;
 }
 
+/* Monday CLOSED row */
+.hours-closed-day {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    color: var(--color-text-mid);
+    font-weight: 500;
+}
+
+.closed-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    color: #c0392b;
+    background-color: rgba(192, 57, 43, 0.10);
+    border: 1px solid rgba(192, 57, 43, 0.35);
+    border-radius: 4px;
+    padding: 1px 7px;
+    text-transform: uppercase;
+}
+
 .insta-link {
     color: var(--color-gold);
     font-weight: 500;
